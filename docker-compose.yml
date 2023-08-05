@@ -1,0 +1,37 @@
+version: '3.4'
+networks:
+    chatapp:
+services:
+  chatappbackend:
+    container_name: chat-app-be
+    image: ${DOCKER_REGISTRY-}chatappbackend
+    build:
+      context: .
+      dockerfile: ChatAppBackEnd/Dockerfile
+    user: root
+    ports:
+        - 8081:80
+        - 8080:443
+    environment:
+        ASPNETCORE_URLS: https://+;http://+
+        ASPNETCORE_HTTPS_PORT: 443
+        DB_HOST: chatappdb
+        DB_NAME: ChatApp
+        DB_SA_PASSWORD: DB@Password
+    depends_on:
+        - chatappdb
+    networks:
+        - chatapp
+    extra_hosts:
+        - host.docker.internal:host-gateway
+
+  chatappdb:
+    container_name: chat-app-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+        ACCEPT_EULA: Y
+        MSSQL_SA_PASSWORD: "DB@Password"
+    ports:
+        - 1434:1433
+    networks:
+        - chatapp
