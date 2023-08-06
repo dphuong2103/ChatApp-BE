@@ -76,8 +76,8 @@ namespace ChatAppBackEnd.Service.UserChatRoomService
                 else
                 {
                     userChatRoom = new UserChatRoom { ChatRoomId = request.ChatRoomId, UserId = userId, CreatedTime = createdTime, MembershipStatus = UserChatRoomStatus.Active };
+                    await _dbContext.UserChatRooms.AddAsync(userChatRoom);
                 }
-                await _dbContext.UserChatRooms.AddAsync(userChatRoom);
             }
             await _dbContext.SaveChangesAsync();
             var addedUsers = await _dbContext.Users.Where(user => request.UserIds.Contains(user.Id)).ToListAsync();

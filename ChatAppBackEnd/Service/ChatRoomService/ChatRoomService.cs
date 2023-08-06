@@ -30,10 +30,12 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             string user1Id = newChatRoomAndUserList.UserIds[0];
             string user2Id = newChatRoomAndUserList.UserIds[1];
             var user1ChatRoomIds = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user1Id && ucr.ChatRoom.ChatRoomType == "ONE").Select(ucr => ucr.ChatRoomId).ToListAsync();
+           
+
             if (user1ChatRoomIds is not null)
             {
-                bool exists = await _dbContext.UserChatRooms.AnyAsync(ucr => ucr.UserId == user2Id && user1ChatRoomIds.Contains(ucr.ChatRoomId));
-                if (exists)
+                var chatRoom2 = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user2Id && user1ChatRoomIds.Contains(ucr.ChatRoomId)).FirstOrDefaultAsync();
+                if (chatRoom2 is not null)
                 {
                     throw new Exception("ChatRoom already exists");
                 }

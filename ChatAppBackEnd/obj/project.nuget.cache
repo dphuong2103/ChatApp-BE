@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6IRZWp/SOy7t88z8Jluh1n1vXEA+wetLLyCTb9u/5jqXxNwuW+xar3tTMZb0yLQy+eY/qN9K4AGOBok+Qp6E0w==",
+  "dgSpecHash": "JGGo8Q0vgIZ9hmWvB7MQw5HbOknMnNmoqN2B4WjMlcoC/DLSS3xr7i9L/xC2rcvg7o+aFL5M65cZpROsYffYtg==",
   "success": true,
-  "projectFilePath": "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
+  "projectFilePath": "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dphuo\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
@@ -45,6 +45,7 @@
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.15.1\\microsoft.visualstudio.azure.containers.tools.targets.1.15.1.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\dphuo\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",

@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   chatappbackend:
-    image: chatappbackend:dev
+    image: midouz/projectmanagement:dev
     build:
       target: base
       labels:

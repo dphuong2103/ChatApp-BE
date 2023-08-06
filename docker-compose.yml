@@ -4,11 +4,13 @@ networks:
 services:
   chatappbackend:
     container_name: chat-app-be
-    image: ${DOCKER_REGISTRY-}chatappbackend
+    image: midouz/chatappbackend
+    user: root
+    tty: true
+    stdin_open: true
     build:
       context: .
       dockerfile: ChatAppBackEnd/Dockerfile
-    user: root
     ports:
         - 8081:80
         - 8080:443
@@ -18,6 +20,8 @@ services:
         DB_HOST: chatappdb
         DB_NAME: ChatApp
         DB_SA_PASSWORD: DB@Password
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "ducphuong198"
+        ASPNETCORE_Kestrel__Certificates__Default__Path: /https/midouz.online.pfx
     depends_on:
         - chatappdb
     networks:
@@ -27,11 +31,15 @@ services:
 
   chatappdb:
     container_name: chat-app-db
+    tty: true 
+    stdin_open: true
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-        ACCEPT_EULA: Y
-        MSSQL_SA_PASSWORD: "DB@Password"
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=DB@Password
     ports:
-        - 1434:1433
+        - 1433:1433
     networks:
         - chatapp
+
+            #image: ${DOCKER_REGISTRY-}chatappbackend

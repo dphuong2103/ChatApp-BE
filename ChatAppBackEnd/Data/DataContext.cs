@@ -6,6 +6,14 @@ namespace ChatAppBackEnd.Data
     {
         public DataContext(DbContextOptions options) : base(options)
         {
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while testing the database connection: " + ex.Message);
+            }
         }
         public DbSet<User> Users { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }

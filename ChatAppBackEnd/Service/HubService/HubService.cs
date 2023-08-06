@@ -6,6 +6,7 @@ using ChatAppBackEnd.Models.DatabaseModels;
 using ChatAppBackEnd.Models.DTO;
 using ChatAppBackEnd.Models.UserChatRooms;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatAppBackEnd.Service.HubService
 {
@@ -70,8 +71,23 @@ namespace ChatAppBackEnd.Service.HubService
 
         public async Task AddMembersToChatGroup(ChatRoomIdAndUsers request)
         {
-            await AddUserConnectionIdsToChatGroup(request.Users, request.ChatRoomId);
+            var chatRoom = await _dbContext.ChatRooms.FindAsync(request.ChatRoomId);
+            var latestMessage = await _dbContext.Messages.Where(m => m.ChatRoomId == request.ChatRoomId).OrderByDescending(m => m.CreatedTime).FirstOrDefaultAsync();
+            var users = await _dbContext.UserChatRooms.Include(ucr => ucr.User).Where(ucr => ucr.ChatRoomId == request.ChatRoomId && ucr.MembershipStatus == UserChatRoomStatus.Active).Select(ucr => ucr.User).ToListAsync();
+            if (chatRoom is null) return;
+            foreach (var user in request.Users)
+            {
+                var connectionIds = _userConnectionIdService.GetUsersConnectionIdsByUserId(user.Id);
+                if (connectionIds is null) continue;
+                var userChatRoom = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user.Id && ucr.ChatRoomId == request.ChatRoomId && ucr.MembershipStatus == UserChatRoomStatus.Active).FirstOrDefaultAsync();
+                if (userChatRoom is null) {
+                    throw new Exception("User chatroom is null");
+                };
+                ChatRoomSummary crs = new ChatRoomSummary { ChatRoom = chatRoom, LatestMessage = latestMessage, Users = users, UserChatRoom = userChatRoom };
+                await _hubContext.Clients.Clients(connectionIds).ReceivedChatroom(crs);
+            }
             await _hubContext.Clients.Group(request.ChatRoomId).AddMembersToChatRoom(request);
+            await AddUserConnectionIdsToChatGroup(request.Users, request.ChatRoomId);
         }
 
         public async Task AddUserConnectionIdsToChatGroup(List<User> users, string chatRoomId)

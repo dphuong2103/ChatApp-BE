@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj": {}
+    "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj": {}
   },
   "projects": {
-    "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj": {
+    "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
+        "projectUniqueName": "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
         "projectName": "ChatAppBackEnd",
-        "projectPath": "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
+        "projectPath": "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\ChatAppBackEnd.csproj",
         "packagesPath": "C:\\Users\\dphuo\\.nuget\\packages\\",
-        "outputPath": "E:\\Software Development Project\\Project Management\\ChatAppBackEnd\\ChatAppBackEnd\\obj\\",
+        "outputPath": "E:\\Software Development Project\\ChatApp\\ChatApp-BackEnd\\ChatAppBackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dphuo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -83,6 +83,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.20, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.15.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
