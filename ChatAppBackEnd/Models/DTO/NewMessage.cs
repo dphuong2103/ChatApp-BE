@@ -15,5 +15,7 @@ namespace ChatAppBackEnd.Models.DTO
 
         [MaxLength(100)]
         public string? ReplyToMessageId { get; set; }
+
+        public string? FileName { get; set; }
     }
 }

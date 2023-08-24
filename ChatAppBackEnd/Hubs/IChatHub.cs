@@ -7,7 +7,7 @@ namespace ChatAppBackEnd.Hubs
 {
     public interface IChatHub
     {
-        Task ReceivedChatroom(ChatRoomSummary chatRoomSummary);
+        Task ReceivedChatRoomSummary(ChatRoomSummary chatRoomSummary);
         Task ReceivedMessage(Message message);
 
         Task UpdateConnectionId(string connectionId);
@@ -26,5 +26,7 @@ namespace ChatAppBackEnd.Hubs
         Task AddMembersToChatRoom(ChatRoomIdAndUsers request);
 
         Task UpdateChatRoomName(ChatRoomIdAndName request);
+
+        Task ReceivedChatRoom(ChatRoom request);
     }
 }

@@ -9,12 +9,13 @@ namespace ChatAppBackEnd.Service.UserChatRoomService
         Task<UserChatRoom> AddUserChatRoom(UserChatRoom request);
         Task<List<UserChatRoom>?> GetUserChatRoomsByUserId(string UserId);
 
-        Task<UserChatRoom?> UpdateUserChatRoomLastMessageRead(string userChatRoomId, UpdateLastMessageRead request);
+        Task<UserChatRoom> UpdateUserChatRoomLastMessageRead(string userChatRoomId, UpdateLastMessageRead request);
 
-        Task<UserChatRoom?> SetMuted(string userChatRoomId, SetMutedDTO request);
+        Task<UserChatRoom> SetMuted(string userChatRoomId, SetMutedDTO request);
 
         Task AddMembersToChatGroup(ChatRoomIdAndUserIds request);
 
-        Task<UserChatRoom?> RemoveMemberFromGroupChat(UserIdAndChatRoomId request);
+        Task<UserChatRoom> RemoveMemberFromGroupChat(UserIdAndChatRoomId request);
+        Task<UserChatRoom> LeaveChatRoom(string userChatRoomId);
     }
 }

@@ -88,6 +88,10 @@
               "target": "Package",
               "version": "[1.15.1, )"
             },
+            "Serilog.Extensions.Logging.File": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"

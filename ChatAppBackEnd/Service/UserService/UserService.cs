@@ -1,4 +1,5 @@
 ﻿using ChatAppBackEnd.Data;
+using ChatAppBackEnd.Exceptions;
 using ChatAppBackEnd.Models.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 namespace ChatAppBackEnd.Service.UserService
@@ -11,11 +12,16 @@ namespace ChatAppBackEnd.Service.UserService
             _dbContext = dbContext;
         }
 
-        public async Task<User> AddUser(User user)
+        public async Task<User> AddUser(User request)
         {
-            _dbContext.Users.Add(user);
+            var user = _dbContext.Users.Find(request.Id);
+            if (user is not null)
+            {
+                throw new UserAlreadyExistsException(user.Id);
+            }
+            _dbContext.Users.Add(request);
             await _dbContext.SaveChangesAsync();
-            return user;
+            return request;
         }
 
         public async Task<List<User>> SearchUsersByEmail(string filterValue)
@@ -36,7 +42,7 @@ namespace ChatAppBackEnd.Service.UserService
             return user;
         }
 
-        public async Task<User?> UpdateUser(string Id,User message)
+        public async Task<User?> UpdateUser(string Id, User message)
         {
             var user = await GetUserById(Id);
             if (user == null)
@@ -45,6 +51,15 @@ namespace ChatAppBackEnd.Service.UserService
             _dbContext.Entry(user).CurrentValues.SetValues(message);
             await _dbContext.SaveChangesAsync();
             return user;
+        }
+
+        public async Task<User?> AddGoogleUser(User request)
+        {
+            var user = await GetUserById(request.Id);
+            if (user is not null) return default;
+            _dbContext.Users.Add(request);
+            await _dbContext.SaveChangesAsync();
+            return request;
         }
     }
 }

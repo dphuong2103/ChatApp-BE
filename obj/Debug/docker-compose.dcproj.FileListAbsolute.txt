@@ -23,3 +23,35 @@ E:\Software Development Project\Project Management\ChatAppBackEnd\bin\Debug\Chat
 E:\Software Development Project\Project Management\ChatAppBackEnd\obj\Debug\docker-compose.dcproj.AssemblyReference.cache
 E:\Software Development Project\Project Management\ChatAppBackEnd\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
 E:\Software Development Project\Project Management\ChatAppBackEnd\obj\Debug\docker-compose.dcproj.CopyComplete
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\appsettings.Development.json
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\appsettings.json
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\ChatAppBackEnd.deps.json
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\ChatAppBackEnd.runtimeconfig.json
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\ChatAppBackEnd.exe
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\ChatAppBackEnd.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.EntityFrameworkCore.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\AutoMapper.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.EntityFrameworkCore.Relational.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Swashbuckle.AspNetCore.Swagger.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Swashbuckle.AspNetCore.SwaggerUI.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Swashbuckle.AspNetCore.SwaggerGen.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.EntityFrameworkCore.SqlServer.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.EntityFrameworkCore.Abstractions.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.Extensions.Caching.Memory.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.OpenApi.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.Data.SqlClient.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Microsoft.Identity.Client.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\ChatAppBackEnd.pdb
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\obj\Debug\docker-compose.dcproj.AssemblyReference.cache
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\obj\Debug\docker-compose.dcproj.CopyComplete
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Extensions.Logging.File.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Formatting.Compact.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Extensions.Logging.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Sinks.Async.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Sinks.RollingFile.dll
+E:\Software Development Project\ChatApp\ChatApp-BackEnd\bin\Debug\Serilog.Sinks.File.dll

@@ -14,5 +14,8 @@ namespace ChatAppBackEnd.Service.ChatRoomService
         Task<List<ChatRoomSummary>> GetChatRoomSummariesByUserId(string userId);
         Task<ChatRoomSummary> AddChatRoomGroup(NewChatRoomAndUserList request);
         Task<ChatRoom> UpdateChatRoomName(string chatRoomId,ChatRoomIdAndName request);
+
+        Task UpdateChatRoomAvatar(string chatRoomId, ChatRoomIdAndImageUrl request);
+
     }
 }

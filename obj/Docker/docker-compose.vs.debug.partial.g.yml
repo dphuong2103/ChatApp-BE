@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   chatappbackend:
-    image: midouz/projectmanagement:dev
+    image: midouz/chatappbackend:dev
     build:
       target: base
       labels:
@@ -13,8 +13,8 @@ services:
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
       - NUGET_FALLBACK_PACKAGES=
     volumes:
-      - E:\Software Development Project\Project Management\ChatAppBackEnd\ChatAppBackEnd:/app
-      - E:\Software Development Project\Project Management\ChatAppBackEnd:/src
+      - E:\Software Development Project\ChatApp\ChatApp-BackEnd\ChatAppBackEnd:/app
+      - E:\Software Development Project\ChatApp\ChatApp-BackEnd:/src
       - C:\Users\dphuo\vsdbg\vs2017u5:/remote_debugger:rw
       - C:\Users\dphuo\.nuget\packages\:/root/.nuget/packages:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

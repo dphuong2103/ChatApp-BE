@@ -18,16 +18,8 @@ namespace ChatAppBackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Message>> AddMessage([FromBody] NewMessage request)
         {
-            try
-            {
-                var message = await _messageService.AddMessage(request);
-                
-                return Ok(message);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var message = await _messageService.AddMessage(request);
+            return Ok(message);
         }
 
         [HttpGet("chatroom/{chatRoomId}")]
@@ -67,7 +59,7 @@ namespace ChatAppBackEnd.Controllers
             try
             {
                 var messages = await _messageService.GetMessagesPageByChatRoomId(chatRoomId, pageSize, lastMessageId);
-                if(messages is null) return NotFound();
+                if (messages is null) return NotFound();
                 return messages;
             }
             catch (Exception err)
@@ -78,18 +70,52 @@ namespace ChatAppBackEnd.Controllers
         }
 
         [HttpPut("delete/{messageId}")]
-        public async Task<ActionResult<Message>> SetDeleteMessage(string messageId)
+        public async Task<ActionResult> SetDeleteMessage(string messageId)
         {
-            try
-            {
-                var message = await _messageService.SetDeleteMessage(messageId);
-                if (message is null) return NoContent();
-                else return Ok(message);
-            }catch(Exception err)
-            {
-                Console.WriteLine(err.Message);
-                return BadRequest(err.Message);
-            }
+            await _messageService.SetDeleteMessage(messageId);
+            return NoContent();
+        }
+
+        [HttpPost("newfileupload")]
+        public async Task<ActionResult<Message>> AddNewMessageForFileUpload(NewMessage request)
+        {
+            var message = await _messageService.AddNewMessageForFileUpload(request);
+            return Ok(message);
+        }
+
+        [HttpPut("{messageId}/fileuploadfinished")]
+        public async Task<ActionResult> UpdateMessageOnFileUploadFinish(string messageId, [FromBody] string fileUrls)
+        {
+            await _messageService.UpdateMessageOnFileUploadFinish(messageId, fileUrls);
+            return NoContent();
+        }
+
+        [HttpPut("{messageId}/canceluploadingmessagefile")]
+        public async Task<ActionResult> CancelUploadingMessageFile(string messageId)
+        {
+            await _messageService.CancelUploadingMessageFile(messageId);
+            return NoContent();
+        }
+
+        [HttpGet("{lastMessageId}/getmissingmessages")]
+        public async Task<ActionResult<Message>> GetMissingMessages(string lastMessageId)
+        {
+            var messages = await _messageService.GetMissingMessages(lastMessageId);
+            return Ok(messages);
+        }
+
+        [HttpPost("AddNewMessageForAudioRecord")]
+        public async Task<ActionResult<Message>> AddNewMessageForAudioRecord(NewMessage request)
+        {
+            var message = await _messageService.AddNewMessageForAudioRecord(request);
+            return Ok(message);
+        }
+
+        [HttpPut("{messageId}/uploadfilemessageerror")]
+        public async Task<ActionResult<Message>> UploadMessageFileError(string messageId)
+        {
+            var message = await _messageService.UploadMessageFileError(messageId);
+            return Ok(message);
         }
     }
 }

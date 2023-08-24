@@ -20,76 +20,47 @@ namespace ChatAppBackEnd.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<List<UserChatRoom>>> GetUserChatRoomsByUserId(string userId)
         {
-            try
-            {
-                var userChatRooms = await _userChatRoomService.GetUserChatRoomsByUserId(userId);
-                if (userChatRooms is null) return NotFound();
-                return Ok(userChatRooms);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+
+            var userChatRooms = await _userChatRoomService.GetUserChatRoomsByUserId(userId);
+            if (userChatRooms is null) return NotFound();
+            return Ok(userChatRooms);
+
         }
 
         [HttpPut("{userChatRoomId}")]
         public async Task<ActionResult<UserChatRoom>> UpdateUserChatRoomLastMessageRead(string userChatRoomId, UpdateLastMessageRead request)
         {
-            try
-            {
-                await _userChatRoomService.UpdateUserChatRoomLastMessageRead(userChatRoomId, request);
-                return NoContent();
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err.Message);
-                return BadRequest(err.Message);
-            }
+            await _userChatRoomService.UpdateUserChatRoomLastMessageRead(userChatRoomId, request);
+            return NoContent();
         }
 
         [HttpPut("{userChatRoomId}/setmuted")]
         public async Task<ActionResult<UserChatRoom>> SetMuted(string userChatRoomId, SetMutedDTO request)
         {
-            try
-            {
-                var userChatRoom = await _userChatRoomService.SetMuted(userChatRoomId, request);
-                return Ok(userChatRoom);
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err.Message);
-                return BadRequest(err.Message);
-            }
+            var userChatRoom = await _userChatRoomService.SetMuted(userChatRoomId, request);
+            return Ok(userChatRoom);
         }
 
         [HttpPost("addmembers")]
         public async Task<ActionResult> AddMembersToChatGroup(ChatRoomIdAndUserIds request)
         {
-            try
-            {
-                await _userChatRoomService.AddMembersToChatGroup(request);
-                return NoContent();
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err.Message);
-                return BadRequest(err.Message);
-            }
+            await _userChatRoomService.AddMembersToChatGroup(request);
+            return NoContent();
         }
 
         [HttpPut("removefromgroupchat")]
         public async Task<ActionResult> RemoveMemberFromGroupChat(UserIdAndChatRoomId request)
         {
-            try
-            {
-                var userChatRoom = await _userChatRoomService.RemoveMemberFromGroupChat(request);
-                if (userChatRoom is null) return NotFound();
-                return NoContent();
-            }catch(Exception err)
-            {
-                Console.WriteLine(err.Message);
-                return BadRequest(err.Message);
-            }
+            var userChatRoom = await _userChatRoomService.RemoveMemberFromGroupChat(request);
+            if (userChatRoom is null) return NotFound();
+            return NoContent();
+        }
+
+        [HttpPut("{userChatRoomId}/leavechatroom")]
+        public async Task<ActionResult> LeaveChatRoom(string userChatRoomId)
+        {
+            await _userChatRoomService.LeaveChatRoom(userChatRoomId);
+            return NoContent();
         }
     }
 }

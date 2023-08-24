@@ -20,14 +20,18 @@ namespace ChatAppBackEnd.Startup
             var dbName = Environment.GetEnvironmentVariable("DB_NAME");
             var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-
             services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            var connectionStringFromEnvironmentVariable = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnections");
-            //.UseLazyLoadingProxies()
+            //var connectionStringFromEnvironmentVariable = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
+            //var connectionString2 = "Data Source=midouz.online,1433;Initial Catalog=ChatApp;Persist Security Info=True;User ID=sa;Password=MySecretPassword@123";
+            var connectionString = builder.Configuration.GetConnectionString("ConnectionStrings");
+            if (!builder.Environment.IsDevelopment())
+            {
+                connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
+            }
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserChatRoomService, UserChatRoomService>();
@@ -38,7 +42,13 @@ namespace ChatAppBackEnd.Startup
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddScoped<IUserRelationshipService, UserRelationshipService>();
             services.AddSignalR();
-            builder.Services.AddCors(options =>
+            builder.Host.ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+            });
+
+            services.AddCors(options =>
             {
                 options.AddPolicy(name: AllowCorsOrigin,
                                   builder =>

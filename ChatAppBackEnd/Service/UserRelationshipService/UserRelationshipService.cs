@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ChatAppBackEnd.Data;
+using ChatAppBackEnd.Exceptions;
 using ChatAppBackEnd.Models.DatabaseModels;
 using ChatAppBackEnd.Models.Relationships;
 using ChatAppBackEnd.Service.HubService;
@@ -40,15 +41,16 @@ namespace ChatAppBackEnd.Service.UserRelationshipService
             return userRelationship!;
         }
 
-        public async Task<UserRelationship?> DeleteRelationship(string relationshipId)
+        public async Task<UserRelationship> DeleteRelationship(string relationshipId)
         {
             var relationship = _dbContext.UserRelationships.Find(relationshipId);
-            if (relationship != null)
+            if (relationship is null)
             {
-                _dbContext.UserRelationships.Remove(relationship);
-                await _dbContext.SaveChangesAsync();
-                await _hubService.SendRelationship(relationship, RelationshipUpdateType_Delete);
+                throw NotFoundUserRelationshipException.ById(relationshipId);
             }
+            _dbContext.UserRelationships.Remove(relationship);
+            await _dbContext.SaveChangesAsync();
+            await _hubService.SendRelationship(relationship, RelationshipUpdateType_Delete);
             return relationship;
         }
 

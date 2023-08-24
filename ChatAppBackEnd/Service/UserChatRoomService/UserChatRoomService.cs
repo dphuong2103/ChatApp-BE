@@ -1,4 +1,5 @@
 ﻿using ChatAppBackEnd.Data;
+using ChatAppBackEnd.Exceptions;
 using ChatAppBackEnd.Models.DatabaseModels;
 using ChatAppBackEnd.Models.DTO;
 using ChatAppBackEnd.Models.UserChatRooms;
@@ -10,11 +11,11 @@ namespace ChatAppBackEnd.Service.UserChatRoomService
     public class UserChatRoomService : IUserChatRoomService
     {
         private readonly DataContext _dbContext;
-        private readonly IHubService _hubservice;
-        public UserChatRoomService(DataContext dbContext, IHubService hubservice)
+        private readonly IHubService _hubService;
+        public UserChatRoomService(DataContext dbContext, IHubService hubService)
         {
             _dbContext = dbContext;
-            _hubservice = hubservice;
+            _hubService = hubService;
         }
         public async Task<UserChatRoom> AddUserChatRoom(UserChatRoom request)
         {
@@ -34,20 +35,27 @@ namespace ChatAppBackEnd.Service.UserChatRoomService
             return userChatRooms;
         }
 
-        public async Task<UserChatRoom?> UpdateUserChatRoomLastMessageRead(string userChatRoomId, UpdateLastMessageRead request)
+        public async Task<UserChatRoom> UpdateUserChatRoomLastMessageRead(string userChatRoomId, UpdateLastMessageRead request)
         {
-            if (request.LastMessageReadId is null) return default;
+            if (request.LastMessageReadId is null)
+            {
+                throw new Exception("Last messagereadid is null");
+            };
             var userChatRoom = await _dbContext.UserChatRooms.FindAsync(userChatRoomId);
-            if (userChatRoom is null) return default;
+            if (userChatRoom is null) {
+                throw NotFoundUserChatRoomException.ById(userChatRoomId);
+            };
             userChatRoom.LastMessageReadId = request.LastMessageReadId;
             await _dbContext.SaveChangesAsync();
             return userChatRoom;
         }
 
-        public async Task<UserChatRoom?> SetMuted(string userChatRoomId, SetMutedDTO request)
+        public async Task<UserChatRoom> SetMuted(string userChatRoomId, SetMutedDTO request)
         {
             var userChatRoom = await _dbContext.UserChatRooms.FindAsync(userChatRoomId);
-            if (userChatRoom is null) return default;
+            if (userChatRoom is null) {
+                throw NotFoundUserChatRoomException.ById(userChatRoomId);
+            }
             userChatRoom.IsMuted = request.IsMuted;
             await _dbContext.SaveChangesAsync();
             return userChatRoom;
@@ -81,27 +89,43 @@ namespace ChatAppBackEnd.Service.UserChatRoomService
             }
             await _dbContext.SaveChangesAsync();
             var addedUsers = await _dbContext.Users.Where(user => request.UserIds.Contains(user.Id)).ToListAsync();
-            ChatRoomIdAndUsers chatRoomIdAndUsers = new ChatRoomIdAndUsers()
+            ChatRoomIdAndUsers chatRoomIdAndUsers = new()
             {
                 ChatRoomId = request.ChatRoomId,
                 Users = addedUsers
             };
-            await _hubservice.AddMembersToChatGroup(chatRoomIdAndUsers);
+            await _hubService.AddMembersToChatGroup(chatRoomIdAndUsers);
         }
 
-        public async Task<UserChatRoom?> RemoveMemberFromGroupChat(UserIdAndChatRoomId request)
+        public async Task<UserChatRoom> RemoveMemberFromGroupChat(UserIdAndChatRoomId request)
         {
             var userChatRoom = await _dbContext.UserChatRooms.Where(ucr => ucr.ChatRoomId == request.ChatRoomId && ucr.UserId == request.UserId && ucr.MembershipStatus == UserChatRoomStatus.Active).FirstOrDefaultAsync();
-            if (userChatRoom is null) return default;
+            if (userChatRoom is null)
+            {
+                throw NotFoundUserChatRoomException.ByChatRoomIdAndUserId(request.UserId, request.ChatRoomId);
+            }
             userChatRoom.MembershipStatus = UserChatRoomStatus.Kicked;
             var chatRoom = await _dbContext.ChatRooms.FindAsync(request.ChatRoomId);
             if (chatRoom is null)
             {
-                return default;
+                throw new NotFoundChatRoomException(request.ChatRoomId);
             }
             await _dbContext.SaveChangesAsync();
             var users = await _dbContext.UserChatRooms.Where(ucr => ucr.ChatRoomId == request.ChatRoomId).Include(ucr => ucr.User).Select(ucr => ucr.User).ToListAsync();
-            await _hubservice.RemoveUserFromGroupChat(request);
+            await _hubService.RemoveUserFromGroupChat(request);
+            return userChatRoom;
+        }
+
+        public async Task<UserChatRoom> LeaveChatRoom(string userChatRoomId)
+        {
+            var userChatRoom = await _dbContext.UserChatRooms.FindAsync(userChatRoomId);
+            if (userChatRoom is null)
+            {
+                throw NotFoundUserChatRoomException.ById(userChatRoomId);
+            }
+            userChatRoom.MembershipStatus = UserChatRoomStatus.Left;
+            await _dbContext.SaveChangesAsync();
+            await _hubService.RemoveUserFromGroupChat(new UserIdAndChatRoomId() { ChatRoomId = userChatRoom.ChatRoomId, UserId = userChatRoom.UserId });
             return userChatRoom;
         }
     }

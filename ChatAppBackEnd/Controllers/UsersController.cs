@@ -18,72 +18,44 @@ namespace ChatAppBackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser([FromBody] User newUser)
         {
-            try
-            {
-                var user = await _userService.AddUser(newUser);
-                return Ok(user);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var user = await _userService.AddUser(newUser);
+            return Ok(user);
         }
 
         [HttpGet("{Id}")]
         public async Task<ActionResult<User>> GetUserById(string Id)
         {
-            try
-            {
-                var user = await _userService.GetUserById(Id);
-                if (user == null) return NotFound();
-                return Ok(user);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var user = await _userService.GetUserById(Id);
+            if (user == null) return NotFound();
+            return Ok(user);
         }
 
         [HttpGet("search/{filterValue}")]
         public async Task<ActionResult<List<User>>> SearchUsersByEmail(string filterValue)
         {
-            try
-            {
-                var filterUsers = await _userService.SearchUsersByEmail(filterValue);
-                return Ok(filterUsers);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var filterUsers = await _userService.SearchUsersByEmail(filterValue);
+            return Ok(filterUsers);
         }
 
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
-            try
-            {
-                var allUsers = await _userService.GetAllUsers();
-                return Ok(allUsers);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var allUsers = await _userService.GetAllUsers();
+            return Ok(allUsers);
         }
 
         [HttpPut("{Id}")]
         public async Task<ActionResult<User>> UpdateUser(string Id, [FromBody] User user)
         {
-            try
-            {
-                var updatedUser = await _userService.UpdateUser(Id, user);
-                return Ok(updatedUser);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var updatedUser = await _userService.UpdateUser(Id, user);
+            return Ok(updatedUser);
+        }
+
+        [HttpPost("google")]
+        public async Task<ActionResult> AddGoogleUser(User request)
+        {
+            await _userService.AddGoogleUser(request);
+            return Ok();
         }
     }
 }

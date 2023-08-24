@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ChatAppBackEnd.Data;
+using ChatAppBackEnd.Exceptions;
 using ChatAppBackEnd.Models.ChatRooms;
 using ChatAppBackEnd.Models.DatabaseModels;
 using ChatAppBackEnd.Models.DTO;
@@ -12,12 +13,12 @@ namespace ChatAppBackEnd.Service.ChatRoomService
     public class ChatRoomService : IChatRoomService
     {
         private readonly DataContext _dbContext;
-        private readonly IHubService _hubservice;
+        private readonly IHubService _hubService;
         private readonly IMapper _mapper;
-        public ChatRoomService(DataContext dbContext, IHubService hubservice, IMapper mapper)
+        public ChatRoomService(DataContext dbContext, IHubService hubService, IMapper mapper)
         {
             _dbContext = dbContext;
-            _hubservice = hubservice;
+            _hubService = hubService;
             _mapper = mapper;
         }
 
@@ -25,7 +26,7 @@ namespace ChatAppBackEnd.Service.ChatRoomService
         {
             if (newChatRoomAndUserList.UserIds is null || newChatRoomAndUserList.UserIds.Count < 2)
             {
-                throw new Exception("UserIDs is null");
+                throw new NullReferenceException("UserIDs is null");
             }
             string user1Id = newChatRoomAndUserList.UserIds[0];
             string user2Id = newChatRoomAndUserList.UserIds[1];
@@ -34,22 +35,16 @@ namespace ChatAppBackEnd.Service.ChatRoomService
 
             if (user1ChatRoomIds is not null)
             {
-                var chatRoom2 = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user2Id && user1ChatRoomIds.Contains(ucr.ChatRoomId)).FirstOrDefaultAsync();
-                if (chatRoom2 is not null)
+                var user2chatRoom = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user2Id && user1ChatRoomIds.Contains(ucr.ChatRoomId)).FirstOrDefaultAsync();
+                if (user2chatRoom is not null)
                 {
-                    throw new Exception("ChatRoom already exists");
+                    throw new ChatRoomAlreadyExistsException(user2chatRoom.ChatRoomId);
                 }
             }
             var chatRoom = _mapper.Map<ChatRoom>(newChatRoomAndUserList.NewChatRoom);
 
             _dbContext.ChatRooms.Add(chatRoom);
             await _dbContext.SaveChangesAsync();
-
-            if (string.IsNullOrEmpty(chatRoom.Id))
-            {
-                throw new InvalidOperationException("chatroomId does not exist");
-            }
-
             foreach (var userId in newChatRoomAndUserList.UserIds)
             {
                 var ucr = new UserChatRoom { ChatRoomId = chatRoom.Id, UserId = userId, CreatedTime = chatRoom.CreatedTime };
@@ -58,7 +53,7 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             await _dbContext.SaveChangesAsync();
             var users = await _dbContext.Users.Where(user => newChatRoomAndUserList.UserIds.Contains(user.Id)).ToListAsync();
             var chatRoomSummary = new ChatRoomSummary { ChatRoom = chatRoom, Users = users };
-            await _hubservice.SendChatRoomInfo(chatRoomSummary);
+            await _hubService.SendChatRoomSummary(chatRoomSummary);
             var userChatRoom = await _dbContext.UserChatRooms.FirstOrDefaultAsync(ucr => ucr.ChatRoomId == chatRoom.Id && ucr.UserId == chatRoom.CreatorId);
             if (userChatRoom is not null) chatRoomSummary.UserChatRoom = userChatRoom;
             return chatRoomSummary;
@@ -81,7 +76,7 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             var chatRoomIds = userChatRooms.Select(ucr => ucr.ChatRoomId).ToList();
 
             var latestMessages = await _dbContext.Messages
-                .Where(m => chatRoomIds.Contains(m.ChatRoomId))
+                .Where(m => chatRoomIds.Contains(m.ChatRoomId) && m.IsDeleted == false)
                 .GroupBy(m => m.ChatRoomId)
                 .Select(g => g.OrderByDescending(m => m.CreatedTime).FirstOrDefault())
                 .ToListAsync();
@@ -145,11 +140,6 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             chatRoom.UpdatedTime = chatRoom.CreatedTime;
             _dbContext.ChatRooms.Add(chatRoom);
             await _dbContext.SaveChangesAsync();
-
-            if (string.IsNullOrEmpty(chatRoom.Id))
-            {
-                throw new InvalidOperationException("chatroomId does not exist");
-            }
             foreach (var userId in request.UserIds)
             {
                 var ucr = new UserChatRoom { ChatRoomId = chatRoom.Id, UserId = userId, CreatedTime = chatRoom.CreatedTime };
@@ -158,7 +148,7 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             await _dbContext.SaveChangesAsync();
             var users = await _dbContext.Users.Where(user => request.UserIds.Contains(user.Id)).ToListAsync();
             var chatRoomSummary = new ChatRoomSummary { ChatRoom = chatRoom, Users = users };
-            await _hubservice.SendChatRoomInfo(chatRoomSummary);
+            await _hubService.SendChatRoomSummary(chatRoomSummary);
             var userChatRoom = await _dbContext.UserChatRooms.FirstOrDefaultAsync(ucr => ucr.ChatRoomId == chatRoom.Id && ucr.UserId == chatRoom.CreatorId);
             if (userChatRoom is not null) chatRoomSummary.UserChatRoom = userChatRoom;
             return chatRoomSummary;
@@ -169,12 +159,24 @@ namespace ChatAppBackEnd.Service.ChatRoomService
             var chatRoom = await _dbContext.ChatRooms.FindAsync(chatRoomId);
             if (chatRoom is null)
             {
-                throw new Exception("ChatRoom is null");
+                throw new NotFoundChatRoomException(chatRoomId);
             }
             chatRoom.Name = request.Name;
             await _dbContext.SaveChangesAsync();
-            await _hubservice.UpdateChatRoomName(request);
+            await _hubService.UpdateChatRoomName(request);
             return chatRoom;
+        }
+
+        public async Task UpdateChatRoomAvatar(string chatRoomId, ChatRoomIdAndImageUrl request)
+        {
+            var chatRoom = await _dbContext.ChatRooms.FindAsync(chatRoomId);
+            if (chatRoom is null)
+            {
+                throw new NotFoundChatRoomException(chatRoomId);
+            }
+            chatRoom.PhotoUrl = request.PhotoUrl;
+            await _dbContext.SaveChangesAsync();
+            await _hubService.SendChatRoom(chatRoom);
         }
     }
 }

@@ -1,6 +1,7 @@
 version: '3.4'
 networks:
-    chatapp:
+    sqlnetwork:
+        external: true
 services:
   chatappbackend:
     container_name: chat-app-be
@@ -17,29 +18,29 @@ services:
     environment:
         ASPNETCORE_URLS: https://+;http://+
         ASPNETCORE_HTTPS_PORT: 443
-        DB_HOST: chatappdb
+        DB_HOST: mysql
+
+        #DB_HOST: 172.17.0.1,1433
         DB_NAME: ChatApp
-        DB_SA_PASSWORD: DB@Password
+        DB_SA_PASSWORD: MySecretPassword@123
         ASPNETCORE_Kestrel__Certificates__Default__Password: "ducphuong198"
         ASPNETCORE_Kestrel__Certificates__Default__Path: /https/midouz.online.pfx
-    depends_on:
-        - chatappdb
+    #depends_on:
+    #    - chatappdb
     networks:
-        - chatapp
+        - sqlnetwork
     extra_hosts:
         - host.docker.internal:host-gateway
 
-  chatappdb:
-    container_name: chat-app-db
-    tty: true 
-    stdin_open: true
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-        - ACCEPT_EULA=Y
-        - MSSQL_SA_PASSWORD=DB@Password
-    ports:
-        - 1433:1433
-    networks:
-        - chatapp
-
+  #chatappdb:
+  #  container_name: chat-app-db
+  #  image: mcr.microsoft.com/mssql/server:2019-latest
+  #  environment:
+  #      accept_eula: y
+  #      mssql_sa_password: MySecretPassword@123
+  #  ports:
+  #      - 1434:1434
+  #  networks:
+  #      - chatapp
             #image: ${DOCKER_REGISTRY-}chatappbackend
+            #image: midouz/chatappbackend

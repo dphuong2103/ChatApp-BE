@@ -1,5 +1,6 @@
 ﻿using ChatAppBackEnd.Data;
 using ChatAppBackEnd.Hubs.Service;
+using ChatAppBackEnd.Models.DatabaseModels;
 using ChatAppBackEnd.Models.DTO;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -107,5 +108,6 @@ namespace ChatAppBackEnd.Hubs
             await Clients.Clients(fromConnectionId).CallDeclined(fromConnectionId);
         }
 
+    
     }
 }

@@ -4,16 +4,19 @@ namespace ChatAppBackEnd.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions options) : base(options)
+        private readonly ILogger<DataContext> _logger;
+        public DataContext(DbContextOptions options, ILogger<DataContext> logger) : base(options)
         {
+            _logger = logger;
             try
             {
                 Database.EnsureCreated();
             }
-            catch (Exception ex)
+            catch (Exception err)
             {
-                Console.WriteLine("An error occurred while testing the database connection: " + ex.Message);
+                logger.LogError(err, $"Error connection to Db with connection string: {base.Database.GetConnectionString()}");
             }
+     
         }
         public DbSet<User> Users { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }

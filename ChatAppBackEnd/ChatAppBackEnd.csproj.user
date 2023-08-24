@@ -4,8 +4,8 @@
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_ControllerDialogWidth>650</WebStackScaffolding_ControllerDialogWidth>
-    <ActiveDebugProfile>ChatAppBackEnd</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>E:\Software Development Project\Project Management\ChatAppBackEnd\ChatAppBackEnd\Properties\PublishProfiles\registry.hub.docker.com_midouz.pubxml</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>Docker (1)</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>E:\Software Development Project\ChatApp\ChatApp-BackEnd\ChatAppBackEnd\Properties\PublishProfiles\registry.hub.docker.com_midouz.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

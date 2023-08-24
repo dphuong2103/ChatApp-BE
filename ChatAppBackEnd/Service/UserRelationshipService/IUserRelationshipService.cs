@@ -10,7 +10,7 @@ namespace ChatAppBackEnd.Service.UserRelationshipService
 
         Task<UserRelationship?> UpdateUserRelationship(string userRelationshipId, UserRelationship request);
 
-        Task<UserRelationship?> DeleteRelationship(string relationshipId);
+        Task<UserRelationship> DeleteRelationship(string relationshipId);
 
         Task<UserRelationship> SendFriendRequest(NewUserRelationship request);
 

@@ -7,7 +7,7 @@ namespace ChatAppBackEnd.Service.HubService
 {
     public interface IHubService
     {
-        Task SendChatRoomInfo(ChatRoomSummary chatRoomSummary);
+        Task SendChatRoomSummary(ChatRoomSummary chatRoomSummary);
         Task SendMessage(Message message);
         Task SendRelationship(UserRelationship userRelationship, string type);
         Task RemoveUserFromGroupChat(UserIdAndChatRoomId request);
@@ -15,5 +15,6 @@ namespace ChatAppBackEnd.Service.HubService
         Task AddMembersToChatGroup(ChatRoomIdAndUsers request);
 
         Task UpdateChatRoomName(ChatRoomIdAndName request);
+        Task SendChatRoom(ChatRoom request);
     }
 }

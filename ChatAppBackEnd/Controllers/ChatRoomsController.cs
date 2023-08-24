@@ -31,43 +31,32 @@ namespace ChatAppBackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<ChatRoomSummary>> AddChatRoom([FromBody] NewChatRoomAndUserList newChatRoomAndUserList)
         {
-            try
-            {
-                var chatRoomSummary = await _chatRoomService.AddChatRoom(newChatRoomAndUserList);
-                return Ok(chatRoomSummary);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+
+            var chatRoomSummary = await _chatRoomService.AddChatRoom(newChatRoomAndUserList);
+            return Ok(chatRoomSummary);
+
         }
 
         [HttpPost("newchatgroup")]
         public async Task<ActionResult<ChatRoomSummary>> AddChatRoomGroup([FromBody] NewChatRoomAndUserList newChatRoomAndUserList)
         {
-            try
-            {
-                var chatRoomSummary = await _chatRoomService.AddChatRoomGroup(newChatRoomAndUserList);
-                return Ok(chatRoomSummary);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            var chatRoomSummary = await _chatRoomService.AddChatRoomGroup(newChatRoomAndUserList);
+            return Ok(chatRoomSummary);
         }
 
         [HttpPut("{chatRoomId}/updatechatname")]
         public async Task<ActionResult> UpdateChatRoomName(string chatRoomId, ChatRoomIdAndName request)
         {
-            try
-            {
-                var chatRoomSummary = await _chatRoomService.UpdateChatRoomName(chatRoomId, request);
-                return NoContent();
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            await _chatRoomService.UpdateChatRoomName(chatRoomId, request);
+            return NoContent();
+        }
+
+        [HttpPut("{chatRoomId}/updatechatroomavatar")]
+        public async Task<ActionResult> UpdateChatRoomAvatar(string chatRoomId, ChatRoomIdAndImageUrl request)
+        {
+            await _chatRoomService.UpdateChatRoomAvatar(chatRoomId, request);
+            return NoContent();
         }
     }
+
 }

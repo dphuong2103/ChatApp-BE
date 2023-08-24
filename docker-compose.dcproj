@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>a2b773a3-e242-45ed-8260-4e0c83d266c4</ProjectGuid>
+    <ProjectGuid>b1d0bc5d-79b1-42dd-9671-8fef539106b3</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>chatappbackend</DockerServiceName>

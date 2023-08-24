@@ -1,4 +1,5 @@
 ﻿using ChatAppBackEnd.Data;
+using ChatAppBackEnd.Exceptions;
 using ChatAppBackEnd.Hubs;
 using ChatAppBackEnd.Hubs.Service;
 using ChatAppBackEnd.Models.ChatRooms;
@@ -31,7 +32,7 @@ namespace ChatAppBackEnd.Service.HubService
             }
         }
 
-        public async Task SendChatRoomInfo(ChatRoomSummary chatRoomSummary)
+        public async Task SendChatRoomSummary(ChatRoomSummary chatRoomSummary)
         {
             var connectionIds = _userConnectionIdService.GetUsersConnectionIds(chatRoomSummary.Users);
             if (connectionIds is null) return;
@@ -47,7 +48,7 @@ namespace ChatAppBackEnd.Service.HubService
                 if (userConnectionIds is null) continue;
                 foreach (var connectionId in userConnectionIds)
                 {
-                    await _hubContext.Clients.Client(connectionId).ReceivedChatroom(chatRoomSummary);
+                    await _hubContext.Clients.Client(connectionId).ReceivedChatRoomSummary(chatRoomSummary);
                 }
             }
         }
@@ -55,7 +56,6 @@ namespace ChatAppBackEnd.Service.HubService
         public async Task SendMessage(Message message)
         {
             await _hubContext.Clients.Groups(message.ChatRoomId).ReceivedMessage(message);
-
         }
 
         public async Task RemoveUserFromGroupChat(UserIdAndChatRoomId request)
@@ -74,17 +74,21 @@ namespace ChatAppBackEnd.Service.HubService
             var chatRoom = await _dbContext.ChatRooms.FindAsync(request.ChatRoomId);
             var latestMessage = await _dbContext.Messages.Where(m => m.ChatRoomId == request.ChatRoomId).OrderByDescending(m => m.CreatedTime).FirstOrDefaultAsync();
             var users = await _dbContext.UserChatRooms.Include(ucr => ucr.User).Where(ucr => ucr.ChatRoomId == request.ChatRoomId && ucr.MembershipStatus == UserChatRoomStatus.Active).Select(ucr => ucr.User).ToListAsync();
-            if (chatRoom is null) return;
+            if (chatRoom is null)
+            {
+                throw new NotFoundChatRoomException(request.ChatRoomId);
+            }
             foreach (var user in request.Users)
             {
                 var connectionIds = _userConnectionIdService.GetUsersConnectionIdsByUserId(user.Id);
                 if (connectionIds is null) continue;
                 var userChatRoom = await _dbContext.UserChatRooms.Where(ucr => ucr.UserId == user.Id && ucr.ChatRoomId == request.ChatRoomId && ucr.MembershipStatus == UserChatRoomStatus.Active).FirstOrDefaultAsync();
-                if (userChatRoom is null) {
+                if (userChatRoom is null)
+                {
                     throw new Exception("User chatroom is null");
                 };
                 ChatRoomSummary crs = new ChatRoomSummary { ChatRoom = chatRoom, LatestMessage = latestMessage, Users = users, UserChatRoom = userChatRoom };
-                await _hubContext.Clients.Clients(connectionIds).ReceivedChatroom(crs);
+                await _hubContext.Clients.Clients(connectionIds).ReceivedChatRoomSummary(crs);
             }
             await _hubContext.Clients.Group(request.ChatRoomId).AddMembersToChatRoom(request);
             await AddUserConnectionIdsToChatGroup(request.Users, request.ChatRoomId);
@@ -104,5 +108,11 @@ namespace ChatAppBackEnd.Service.HubService
         {
             await _hubContext.Clients.Groups(request.ChatRoomId).UpdateChatRoomName(request);
         }
+
+        public async Task SendChatRoom(ChatRoom request)
+        {
+            await _hubContext.Clients.Group(request.Id).ReceivedChatRoom(request);
+        }
+
     }
 }

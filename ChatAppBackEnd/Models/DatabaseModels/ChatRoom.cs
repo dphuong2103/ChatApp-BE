@@ -12,8 +12,9 @@ namespace ChatAppBackEnd.Models.DatabaseModels
         public string Id { get; set; }
 
         public string? Name { get; set; }
-        
+
         public string ChatRoomType { get; set; } = CHATROOMTYPE_ONE;
+        public string? PhotoUrl { get; set; }
 
         public bool IsDeleted { get; set; } = false;
 
@@ -26,7 +27,8 @@ namespace ChatAppBackEnd.Models.DatabaseModels
 
         public DateTime UpdatedTime { get; set; }
     }
-    public static class ChatRoomType {
+    public static class ChatRoomType
+    {
         public const string ONE = "ONE";
         public const string MANY = "MANY";
 
